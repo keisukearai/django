@@ -77,8 +77,17 @@ WSGI_APPLICATION = 'imgsite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'NAME': 'blog_db', #　作成したデータベース名
+        'USER': 'admin', # ログインユーザー名
+        'PASSWORD': 'admin',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
@@ -129,3 +138,67 @@ MEDIA＿ROOT = os.path.join(BASE_DIR, 'media')
 
 # 画像をdjango側で読み込むための設定
 MEDIA_URL = 'media/'
+
+####################
+# ログ設定
+####################
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    # ログ出力フォーマットの設定
+    'formatters': {
+        'production': {
+            'format': '%(asctime)s [%(levelname)s] %(process)d %(thread)d '
+                      '%(pathname)s:%(lineno)d %(message)s'
+        },
+    },
+    # ハンドラの設定
+    'handlers': {
+        'django_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
+            'maxBytes': 1024 * 1024 * 10, # 10MB
+            'backupCount': '5',
+            'encoding': 'utf-8',
+            'formatter': 'production',
+        },
+        'blog_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/blog.log'),
+            'maxBytes': 1024 * 1024 * 10, # 10MB
+            'backupCount': '5',
+            'encoding': 'utf-8',
+            'formatter': 'production',
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        }
+    },
+    # ロガーの設定
+    'loggers': {
+        # blogアプリケーションのロガー
+        'blog': {
+            'handlers': ['blog_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # Django自身が出力するログ全般のロガー
+        'django': {
+            'handlers': ['django_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

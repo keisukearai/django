@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from .models import Blog
+from .models import Category
 
 """ Django 管理サイト名変更 """
 admin.site.site_header = 'ブログ管理サイト'
@@ -17,3 +18,4 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'blog_image')
 
 admin.site.register(Blog, BlogAdmin)
+admin.site.register(Category)

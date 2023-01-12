@@ -1,0 +1,23 @@
+# mysql -u root -p
+use blog_db;
+drop table img_blog;
+
+# サーバー(ログフォルダの権限変更 admin)
+chmod -R 777 /var/www/html/imgsite/logs
+rm -rf /var/www/html/imgsite/cloud_sw/migrations/*.py
+
+★migrationsフォルダ内を削除する(windows)
+del /S /Q D:\vscode\imgsite\img\migrations\*.py
+del /S /Q D:\vscode\imgsite\img\migrations\*.pyc
+
+# マイグレーションファイルの再作成
+python manage.py makemigrations img
+# 設定クリア
+python manage.py migrate --fake img zero
+# マイグレーション実施
+python manage.py migrate
+# データ投入
+python manage.py loaddata master.json
+
+# サーバ起動(local)
+python manage.py runserver

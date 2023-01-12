@@ -11,6 +11,7 @@ app_name = 'img'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('ajax', views.AjaxView.as_view(), name='ajax'),
+    path('blog', views.BlogView.as_view(), name='blog'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

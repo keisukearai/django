@@ -1,0 +1,42 @@
+{# テンプレートのロード #}
+{% extends "base.html" %}
+
+{% block title %}
+Blog
+{% endblock %}
+
+{% block header %}
+<h1>ブログサイトタイトル</h1>
+<div>
+    <select>
+        <option></option>
+        {% for category in category_list %}
+            <option value="{{ category.id }}">{{ category.category_name }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:5rem;">カテゴリ</th>
+                <th style="width:10rem;">タイトル</th>
+                <th>画像</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for blog in blog_list %}
+            <tr>
+                <td>{{ blog.category_name }}</td>
+                <td>{{ blog.title }}</td>
+                <td><img src="/media/{{ blog.image }}" style="width:5rem;" /></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}

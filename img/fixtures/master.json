@@ -1,0 +1,23 @@
+[
+    {
+        "model": "img.Category",
+        "pk": 1,
+        "fields": {
+            "category_name": "プログラム"
+        }
+    },
+    {
+        "model": "img.Category",
+        "pk": 2,
+        "fields": {
+            "category_name": "映画"
+        }
+    },
+    {
+        "model": "img.Category",
+        "pk": 3,
+        "fields": {
+            "category_name": "音楽"
+        }
+    }
+]
