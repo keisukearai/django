@@ -1,0 +1,67 @@
+# ①nginx設定
+vi /etc/nginx/sites-available/portfolio
+---
+server {
+    listen 80;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name ドメイン;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:///uwsgi/uwsgi_portfolio.sock;
+    }
+
+    # Djangoプロジェクト公開フォルダ
+    location /static {
+        alias /var/www/html/portfolio/static;
+    }
+}
+---
+
+# ②uwsgi設定
+vi /etc/nginx/uwsgi_portfolio.ini
+---
+[uwsgi]
+module = index
+master = true
+socket = /uwsgi/uwsgi_portfolio.sock
+chmod-socket = 666
+chdir = /var/www/html/portfolio/
+wsgi-file = /var/www/html/portfolio/portfolio/wsgi.py
+pidfile = /uwsgi/uwsgi_portfolio.pid
+logto = /uwsgi/uwsgi_portfolio.log
+---
+
+# ③uwsgiサービス
+vi /etc/systemd/system/uwsgi_portfolio.service
+---
+[Unit]
+Description = uWSGI
+After = syslog.target
+
+[Service]
+ExecStart = /usr/local/bin/uwsgi --ini /etc/nginx/uwsgi_portfolio.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+---
+
+# 設定反映
+ln -s /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/
+ls /etc/nginx/sites-enabled
+
+# ④uwsgiとnginxの再起動
+systemctl stop uwsgi_portfolio.service
+systemctl start uwsgi_portfolio.service
+systemctl reload nginx
+
+# ⑤https化(2つ目のドメインに対して実施する)
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04-ja
