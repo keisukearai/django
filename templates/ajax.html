@@ -1,0 +1,38 @@
+{# テンプレートのロード #}
+{% extends "base.html" %}
+
+{% block title %}
+Ajax
+{% endblock %}
+
+{% block header %}
+<h1>Ajaxサイトタイトル</h1>
+{% endblock %}
+
+{% block content %}
+<div>
+    <button id="button">ajax通信</button>
+    <div id="result"></div>
+</div>
+{% endblock %}
+
+{% block js %}
+$(function(){
+    $("#button").click(function(event){
+        $.ajax({
+            type: "post",
+            url: "{% url 'img:ajax' %}",
+            dataType : "json"
+        })
+        // Ajaxリクエストが成功した場合
+        .done(function(data) {
+            console.log(data);
+            $("#result").html(JSON.stringify(data));
+        })
+        // Ajaxリクエストが失敗した場合
+        .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            alert(errorThrown);
+        });
+    });
+});
+{% endblock %}
