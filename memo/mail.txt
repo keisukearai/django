@@ -1,0 +1,14 @@
+■メール送信
+https://blog.narito.ninja/detail/64/
+
+settings.py
+####################
+# mail設定
+####################
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = '送信専用<no-reply@ドメイン>'
