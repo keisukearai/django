@@ -1,0 +1,223 @@
+# ■rootユーザ
+##############################
+# 基本設定
+##############################
+# OSアップデート
+apt-get update
+
+# locateコマンドのインストール
+apt-get install mlocate
+
+# ユーザの作成
+adduser admin
+# sudo追加
+usermod -G sudo admin
+
+# python3→python
+apt install python-is-python3
+
+# pipなどインストール
+apt-get install python3-distutils
+apt install python3-pip
+
+# pipアップデート
+python -m pip install -U pip
+
+# nginxインストール
+apt install nginx
+# 自動起動
+systemctl enable nginx
+
+# uwsgi導入
+pip install uwsgi
+mkdir /uwsgi
+chmod 777 /uwsgi/
+
+# DBインストール
+apt install mariadb-server
+# 自動起動
+systemctl enable mariadb
+
+# ユーザ&DB作成
+mysql -u root -p
+
+create user ユーザ名@'localhost' identified by 'パスワード';
+create database DB名;
+grant all on DB名.* to ユーザ名@'localhost';
+
+# pythonとDBの連携
+apt-get install python3-dev libmysqlclient-dev
+apt install libmariadb-dev-compat libmariadb-dev
+
+# root httpフォルダ権限変更
+chmod 777 /var/www/html/
+
+# git
+git config --global user.name "Gitユーザ名"
+git config --global user.email "Gitメール"
+
+su - admin
+cd /var/www/html/
+git clone https://github.com/django_project.git
+
+# Djangoプロジェクト配置の確認
+ls /var/www/html/django_project
+
+##############################
+# nginx設定
+##############################
+vi /etc/nginx/sites-available/django_project
+---
+server {
+    listen 80;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name IPアドレス;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:///uwsgi/uwsgi.sock;
+    }
+
+    # Djangoプロジェクト公開フォルダ
+    location /static {
+        alias /var/www/html/django_project/static;
+    }
+}
+---
+
+##############################
+# uwsgi設定
+##############################
+vi /etc/nginx/uwsgi.ini
+---
+[uwsgi]
+module = index
+master = true
+socket = /uwsgi/uwsgi.sock
+chmod-socket = 666
+chdir = /var/www/html/django_project/
+wsgi-file = /var/www/html/django_project/django_project/wsgi.py
+pidfile = /uwsgi/uwsgi.pid
+logto = /uwsgi/uwsgi.log
+---
+
+# uwsgiサービス
+vi /etc/systemd/system/uwsgi.service
+---
+[Unit]
+Description = uWSGI
+After = syslog.target
+
+[Service]
+ExecStart = /usr/local/bin/uwsgi --ini /etc/nginx/uwsgi.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+---
+
+# 設定反映
+ln -s /etc/nginx/sites-available/django_project /etc/nginx/sites-enabled/
+ls /etc/nginx/sites-enabled
+
+# デフォルトの解除
+unlink default
+
+# サービス＆nginx起動＆確認
+systemctl stop uwsgi.service
+systemctl start uwsgi.service
+systemctl status uwsgi.service
+systemctl restart nginx
+systemctl status nginx
+
+# mariadb接続モジュール導入
+# root
+apt install libmysqlclient-dev
+
+# admin
+pip install mysqlclient
+cd /var/www/html/django_project
+# 接続確認
+python manage.py migrate
+
+##############################
+# nginx設定(IP→ドメイン)
+##############################
+vi /etc/nginx/sites-available/django_project
+---
+server {
+    listen 80;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    # server_name IPアドレス;
+    server_name ドメイン;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:///uwsgi/uwsgi.sock;
+    }
+
+    # Djangoプロジェクト公開フォルダ
+    location /static {
+        alias /var/www/html/django_project/static;
+    }
+}
+---
+
+# 設定ファイルチェック
+nginx -t
+
+# https化
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04-ja
+
+# cron(再起動の設定) root
+#minute hour    mday    month   wday    command
+25      7       *       *       1       /sbin/shutdown -r now
+
+##############################
+# postfixインストール(メール送信機能)
+##############################
+apt install postfix
+apt install mailutils
+
+# 設定ファイル追加
+vi /etc/postfix/main.cf
+---
+# PostfixのFQDNを設定
+myhostname = xxx.com
+
+# ドメイン名を設定
+mydomain = xxx.com
+myorigin = $mydomain
+
+# 全てのインターフェースでメールを受信
+inet_interfaces = all
+
+# 宛先にドメインを追加
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+# IPv4
+inet_protocols = ipv4
+
+# メールボックス形式を設定
+home_mailbox = Maildir/
+
+# smtpd
+smtpd_relay_restrictions =  permit_mynetworks,permit_sasl_authenticated,reject_unauth_destination
+---
+
+# 再起動
+systemctl start postfix
+systemctl enable postfix
+
+# メール送信
+echo "テストメール" | mail -s "タイトル" -r no-reply@xxx.com test@gmail.com
