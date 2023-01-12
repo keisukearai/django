@@ -2,3 +2,5 @@
 2023-01-12 13:49:49,530 [DEBUG] 22168 22680 d:\vscode\imgsite\img\views.py:47 select * from img_blog b inner join img_category c on b.category_id = c.id order by b.id
 2023-01-12 13:50:24,309 [DEBUG] 19852 12080 d:\vscode\imgsite\img\views.py:43 SELECT `img_category`.`id`, `img_category`.`category_name` FROM `img_category` ORDER BY `img_category`.`id` DESC
 2023-01-12 13:50:24,311 [DEBUG] 19852 12080 d:\vscode\imgsite\img\views.py:47 select * from img_blog b inner join img_category c on b.category_id = c.id order by b.id
+2023-01-12 13:51:36,667 [DEBUG] 19852 18520 d:\vscode\imgsite\img\views.py:43 SELECT `img_category`.`id`, `img_category`.`category_name` FROM `img_category` ORDER BY `img_category`.`id` DESC
+2023-01-12 13:51:36,668 [DEBUG] 19852 18520 d:\vscode\imgsite\img\views.py:47 select * from img_blog b inner join img_category c on b.category_id = c.id order by b.id
