@@ -1,0 +1,185 @@
+# ■rootユーザ
+# OSアップデート
+apt-get update
+
+# PHPリポジトリ追加
+add-apt-repository ppa:ondrej/php
+
+# locateコマンドのインストール
+apt-get install mlocate
+
+# ユーザの作成(araiは各自設定)
+adduser arai
+# sudo追加
+usermod -G sudo arai
+
+##############################
+# PHPインストール
+##############################
+apt-get install php7.4 php7.4-fpm php7.4-mysql php7.4-mbstring php7.4-gd zip unzip php7.4-zip libapache2-mod-php7.4 php7.4-dom php-xml
+# バージョン確認
+php -v
+
+##############################
+# composerインストール(教材参照)
+##############################
+# ダウンロード
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+# インストール
+php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+# バージョン確認
+composer -V
+
+# ■rootユーザ
+##############################
+# apache2インストール(Webサーバ)
+##############################
+# インストールされていない場合
+# apt install apache2
+
+# ■一般ユーザ
+##############################
+# Laravelインストール(プロジェクト名 testapp)
+##############################
+cd /var/www/html/
+composer create-project --prefer-dist laravel/laravel testapp "5.8.*"
+
+# ■rootユーザ
+##############################
+# apache2設定(Webサーバ) プロジェクト名の「testapp」は適宜修正
+##############################
+# 設定ファイルの作成(/var/www/html/testapp)
+cd /etc/apache2/sites-available
+vi testapp.conf
+-----
+<VirtualHost *:80>
+  ServerName 160.251.7.120
+  DocumentRoot /var/www/html/testapp/public
+
+  ErrorLog /var/log/application-log/testapp/error.log
+  CustomLog /var/log/application-log/testapp/access.log ltsv
+
+  <Directory /var/www/html/testapp/public>
+    AllowOverride All
+    Options Includes FollowSymLinks
+    Require all granted
+  </Directory>
+</VirtualHost>
+-----
+
+# ログフォルダの作成
+mkdir /var/log/application-log/testapp
+
+vi /etc/apache2/apache2.conf
+# LogFormatに以下追記
+LogFormat "host:%h\tident:%l\tuser:%u\ttime:%t\treq:%r\tstatus:%>s\tsize:%b\treferer:%{Referer}i\tua:%{User-Agent}i" ltsv
+
+# apache2設定ファイルの確認
+apache2ctl configtest
+# apache2設定ファイルの反映
+a2ensite testapp.conf
+
+##############################
+# Laravel関連
+##############################
+# フォルダ所有者の変更
+chown -R www-data:www-data /var/www/html/testapp/storage /var/www/html/testapp/bootstrap/cache
+# フォル権限の変更
+cd /var/www/html/testapp/storage
+chmod -R 777 logs
+
+cd /var/www/html/testapp/bootstrap/
+chmod -R 777 cache
+
+# rewrite.loadの存在チェック
+ls /etc/apache2/mods-enabled/ | grep rewrite.load
+# rewrite.loadの作成
+a2enmod rewrite
+
+# apache2 リスタート
+systemctl restart apache2
+# 自動起動
+systemctl enable apache2
+
+##############################
+# mariadbのイントール
+##############################
+# イントール
+apt install mariadb-server
+
+# セキュリティの強化(必要であれば)
+# mysql_secure_installation
+
+# 自動起動
+systemctl enable mariadb
+
+# DBの追加&テーブル作成
+
+# Laravelプロジェクトにルートを追加
+# ブラウザで確認
+http://IPアドレス/ルート
+
+■MariaDB
+-- rootでログイン
+mysql -u root -p
+
+★ユーザ作成
+-- 作成
+create user 'DBユーザ名'@'%' identified by 'パスワード';
+-- 権限付与
+grant all privileges on *.* to 'DBユーザ名'@'%' with grant option;
+
+★mariadbの外部接続(root)
+設定ファイル「/etc/mysql/mariadb.conf.d/50-server.cnf」の更新
+vi /etc/mysql/mariadb.conf.d/50-server.cnf
+---
+bind-address            = 127.0.0.1
+↓
+# bind-address            = 127.0.0.1
+---
+
+-- mariadbの再起動
+systemctl restart mysqld
+
+★テーブル作成
+-- create文を抽出してサーバに配置
+/home/conohaログインユーザ/ddl/create.sql
+
+cd /home/conohaログインユーザ/ddl/
+mysql -u DBユーザ名 -p
+source create.sql
+
+■apache(root)
+★ドメイン設定
+cd /etc/apache2/sites-available/
+vi xxx.conf
+---
+  #ServerName 119.27.14.155
+  ServerName hoge.com
+---
+
+★000-default.conf無効化
+a2dissite 000-default.conf
+
+■laravel(一般)
+cd /var/www/html/
+
+■gitからプログラムを落とす
+git clone https://github/xxx.git プロジェクト名
+
+cd プロジェクト名
+★composer 更新
+composer update
+
+エラーの場合
+apt install php7.4-gd
+apt install php7.4-zip
+
+★「.env」設定ファイルの更新
+vi .env
+
+★git 反映
+git pull
+
+■SSL化(https通信)
+https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-20-04-ja
