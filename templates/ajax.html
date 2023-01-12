@@ -18,7 +18,7 @@ Ajax
 
 {% block js %}
 $(function(){
-    $("#button").click(function(event){
+    $("#button").on('click', function(event) {
         $.ajax({
             type: "post",
             url: "{% url 'img:ajax' %}",

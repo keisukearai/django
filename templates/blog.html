@@ -8,14 +8,18 @@ Blog
 {% block header %}
 <h1>ブログサイトタイトル</h1>
 <div>
-    <select>
-        <option></option>
-        {% for category in category_list %}
-            <option value="{{ category.id }}">{{ category.category_name }}</option>
-        {% endfor %}
-    </select>
+    <form method="post" action="{% url 'img:blog' %}">
+        {% csrf_token %}
+        <select name="category" onchange="submit(this.form)">
+            <option value="0"></option>
+            {% for category in category_list %}
+                <option value="{{ category.id }}" {% if category.id == selected_category %}selected{% endif %}>{{ category.id }}:{{ category.category_name }}</option>
+            {% endfor %}
+        </select>
+    </form>
 </div>
 <div>
+    <div>{{ blog_list|length }}件</div>
     <table>
         <thead>
             <tr>
