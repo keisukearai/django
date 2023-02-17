@@ -573,3 +573,17 @@ TypeError: 'Category' object is not subscriptable
 2023-01-12 16:39:42,075 [INFO] 20192 26592 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:266 D:\vscode\imgsite\img\views.py changed, reloading.
 2023-01-12 16:39:42,645 [INFO] 20340 10736 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
 2023-02-17 14:32:58,828 [INFO] 18752 30164 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
+2023-02-17 14:33:14,151 [INFO] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /admin/ HTTP/1.1" 200 7605
+2023-02-17 14:33:16,975 [INFO] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /admin/img/blog/ HTTP/1.1" 200 8514
+2023-02-17 14:33:17,001 [INFO] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /admin/jsi18n/ HTTP/1.1" 200 9315
+2023-02-17 14:33:17,071 [WARNING] 18752 10980 D:\Anaconda3\lib\site-packages\django\utils\log.py:241 Not Found: /media/Cold-Outside-giraffe-scarf_2560x1440.jpg
+2023-02-17 14:33:17,072 [WARNING] 18752 18176 D:\Anaconda3\lib\site-packages\django\utils\log.py:241 Not Found: /media/Abstract-curves-bright-blue-background_m.jpg
+2023-02-17 14:33:17,074 [WARNING] 18752 29584 D:\Anaconda3\lib\site-packages\django\utils\log.py:241 Not Found: /media/8ae0b4e98cd0e4e0a1947456ea804f1b.jpg
+2023-02-17 14:33:17,075 [WARNING] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /media/Cold-Outside-giraffe-scarf_2560x1440.jpg HTTP/1.1" 404 3496
+2023-02-17 14:33:17,075 [WARNING] 18752 18176 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /media/Abstract-curves-bright-blue-background_m.jpg HTTP/1.1" 404 3512
+2023-02-17 14:33:17,076 [WARNING] 18752 29584 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /media/8ae0b4e98cd0e4e0a1947456ea804f1b.jpg HTTP/1.1" 404 3480
+2023-02-17 14:33:17,083 [WARNING] 18752 10980 D:\Anaconda3\lib\site-packages\django\utils\log.py:241 Not Found: /media/Blue-spiral-black-background-abstract_3840x2160.jpg
+2023-02-17 14:33:17,084 [WARNING] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /media/Blue-spiral-black-background-abstract_3840x2160.jpg HTTP/1.1" 404 3540
+2023-02-17 14:33:20,924 [INFO] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /admin/img/blog/7/change/ HTTP/1.1" 200 8798
+2023-02-17 14:33:20,944 [INFO] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /admin/jsi18n/ HTTP/1.1" 200 9315
+2023-02-17 14:33:23,337 [INFO] 18752 10980 D:\Anaconda3\lib\site-packages\django\core\servers\basehttp.py:187 "GET /admin/img/blog/ HTTP/1.1" 200 8514
