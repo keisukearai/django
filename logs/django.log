@@ -1,4 +1,0 @@
-2023-02-17 14:45:18,089 [INFO] 10368 24560 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:266 D:\vscode\django\img\views_queryset.py changed, reloading.
-2023-02-17 14:45:18,755 [INFO] 24020 27280 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
-2023-02-17 14:45:35,711 [INFO] 24020 27280 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:266 D:\vscode\django\img\views_queryset.py changed, reloading.
-2023-02-17 14:45:36,366 [INFO] 1764 8956 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
