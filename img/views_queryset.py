@@ -48,7 +48,11 @@ class BlogView(TemplateView):
         category_list = common.get_category_list()
 
         # Query実行
-        blog_list = Blog.objects.select_related('category').all().order_by("-category_id").values(
+        blog = Blog.objects.select_related('category').all().order_by("-category_id")
+        # SQLの出力
+        logger.debug(blog.query)
+        # QuerySetへ
+        blog_list = blog.values(
             'title',
             'image',
             'category__category_name'
