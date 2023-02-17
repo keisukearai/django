@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="csrf_token" content="{{ csrf_token }}">
+        <title>
+            {# 個別のタイトル #}
+            {% block title %}
+                {{ title }}
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <header>
+            {# 個別のヘッダー #}
+            {% block header %}
+                {{ header }}
+            {% endblock %}
+        </header>
+
+        <article>
+            {# 個別のコンテツ #}
+            {% block content %}
+                {{ content }}
+            {% endblock %}
+        </article>
+
+        <footer>
+            <p>© サイトタイトル</p>
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script>
+            var csrftoken = $.cookie('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        </script>
+        <script>
+            {# 個別のJS #}
+            {% block js %}
+                {{ js }}
+            {% endblock %}
+        </script>
+    </body>
+</html>

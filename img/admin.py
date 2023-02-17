@@ -13,7 +13,10 @@ admin.site.index_title = 'テーブル一覧'
 class BlogAdmin(admin.ModelAdmin):
 
     def blog_image(self, obj):
-        return mark_safe('<img src="{}" style="width:5rem;">'.format(obj.image.url))
+        # 画像の存在チェック
+        if obj.image:
+            return mark_safe(f'<img src="{ obj.image.url }" style="width:5rem;">')
+        return ''
 
     list_display = ('title', 'blog_image')
 

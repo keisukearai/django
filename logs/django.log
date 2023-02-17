@@ -572,3 +572,4 @@ TypeError: 'Category' object is not subscriptable
 2023-01-12 16:39:34,562 [INFO] 20192 26592 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
 2023-01-12 16:39:42,075 [INFO] 20192 26592 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:266 D:\vscode\imgsite\img\views.py changed, reloading.
 2023-01-12 16:39:42,645 [INFO] 20340 10736 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader
+2023-02-17 14:32:58,828 [INFO] 18752 30164 D:\Anaconda3\lib\site-packages\django\utils\autoreload.py:677 Watching for file changes with StatReloader

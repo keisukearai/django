@@ -1,17 +1,17 @@
 {# テンプレートのロード #}
-{% extends "q/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
 Home
 {% endblock %}
 
 {% block header %}
-<h1>サイトタイトル</h1>
+<h1>QuerySetサイトタイトル</h1>
 {% endblock %}
 
 {% block content %}
 <div>
-    <a href="{% url 'img:blog' %}">Blogページへ<a>
+    <a href="{% url 'img:q_blog' %}">Blogページへ<a>
 </div>
 <div>
     <a href="{% url 'img:ajax' %}">Ajaxページへ<a>

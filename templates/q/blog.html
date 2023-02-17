@@ -1,0 +1,46 @@
+{# テンプレートのロード #}
+{% extends "base.html" %}
+
+{% block title %}
+Blog
+{% endblock %}
+
+{% block header %}
+<h1>QuerySetブログサイトタイトル</h1>
+<div>
+    <form method="post" action="{% url 'img:q_blog' %}">
+        {% csrf_token %}
+        <select name="category" onchange="submit(this.form)">
+            <option value="0"></option>
+            {% for category in category_list %}
+                <option value="{{ category.id }}" {% if category.id == selected_category %}selected{% endif %}>{{ category.id }}:{{ category.category_name }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+<div>
+    <div>{{ blog_list|length }}件</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:5rem;">カテゴリ</th>
+                <th style="width:10rem;">タイトル</th>
+                <th>画像</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for blog in blog_list %}
+            <tr>
+                <td>{{ blog.category__category_name }}</td>
+                <td>{{ blog.title }}</td>
+                <td><img src="/media/{{ blog.image }}" style="width:5rem;" /></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
