@@ -40,6 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    # django-allauth追加
+    'accounts',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -214,3 +220,17 @@ INTERNAL_IPS = ('127.0.0.1', '172.16.11.80')
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
+
+# django-allauth
+SITE_ID = 1
+LOGIN_REDIRECT_URL = 'home'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'hoge@hoge.com'
+EMAIL_HOST_PASSWORD = 'hogehoge'
+EMAIL_USE_TLS = True
+
+# 即ログアウトとする
+ACCOUNT_LOGOUT_ON_GET = True

@@ -1,6 +1,8 @@
 {# テンプレートのロード #}
 {% extends "q/base.html" %}
 
+{% load account %}
+
 {% block title %}
 Home
 {% endblock %}
@@ -15,5 +17,18 @@ Home
 </div>
 <div>
     <a href="{% url 'img:ajax' %}">Ajaxページへ<a>
+</div>
+<div>
+    <div>ログインユーザ名:{% user_display user %}</div>
+    <div>
+        {% if user.is_authenticated %}
+            ログイン中
+        {% endif %}
+    </div>
+    <a href="{% url 'account_login' %}">ログインページへ<a>
+    <br>
+    <a href="{% url 'account_reset_password' %}">パスワードリセット<a>
+    <br>
+    <a href="{% url 'account_logout' %}">ログアウト</a>
 </div>
 {% endblock %}
